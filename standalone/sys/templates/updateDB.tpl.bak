@@ -1,0 +1,209 @@
+<{*$route = "updateDB"*}>
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+	body {
+		font-family: "Helvetica Neue", Helvetica, Arial, "微軟正黑體", sans-serif;
+	}
+
+	table.table {
+		font-size: 18px;
+	}
+
+	table.submitdata {
+		font-size: 16px;
+	}
+
+	table.my_title{
+		border-width:3px;
+		border-color: #FFFFF3;
+		border-radius:5;
+	}
+	table.my_title td{
+		height: 50px;
+		vertical-align: bottom;
+	}
+
+</style>
+
+<{if $route != "mainView"}> <{*網頁輸出的頁面呈現*}>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script>
+console.log("hello");
+
+$(document).ready(function(){
+    $.post("../update_stud_eng.php",
+    {
+			<{foreach key=id item=eng_name from=$eng_name_format }>
+				<{$id}>:"<{$eng_name}>",
+			<{/foreach}>
+    },
+    function(data,status){
+      //alert("Data: " + data);
+    });
+});
+
+</script>
+
+<{/if}> <{*if $route != "mainView"*}>
+
+</head>
+
+
+
+
+<body class="container">
+
+	 <form name='form1' method='post' action=''>
+
+<{*送出名字*}>
+<{foreach key=id item=name from=$users_name_data }>
+		<{assign var='uid' value=$id}>
+		<{assign var='uuid' value="users_name_data[$uid]"}>
+		<input name="<{$uuid}>" type="hidden" value="<{$name}>">
+<{/foreach}>
+<{*end 送出名字*}>
+	 </form>
+	</td>
+	<td>
+	<form name='form2' method='post' action=''>
+		<input name="set_name_format" type="hidden" value="<{$_post_name_format}>">
+		<input name="set_all_pinyin_metod" type="hidden" value="<{$default_pinyin}>">
+<{*送出名字*}>
+<{foreach key=id item=name from=$users_name_data }>
+		<{assign var='uid' value=$id}>
+		<{assign var='uuid' value="users_name_data[$uid]"}>
+		<input name="<{$uuid}>" type="hidden" value="<{$name}>">
+<{/foreach}>
+<{*end 送出名字*}>
+
+		<{foreach from=$pinyin_selected_values key=id item=py_method}>
+
+      <{*拼音方式選擇*}>
+      <{assign var='uid' value=$id}>
+      <{assign var='uuid' value="pinyin_select[$uid]"}>
+       <input name="<{$uuid}>" type="hidden" value="<{$py_method}>">
+
+        <{*多音字注音sn選定*}>
+        <{if isset($post_ph_selected_values.$id)}>
+          <{foreach from=$post_ph_selected_values.$id key=pos item=ph_sn}>
+            <{assign var='uid' value=$id}>
+            <{assign var='uuid' value="ph_select[$uid][$pos]]"}>
+             <input name="<{$uuid}>" type="hidden" value="<{$ph_sn}>">
+          <{/foreach}>
+        <{/if}>
+
+    <{/foreach}>
+
+		<{*html_options name='set_name_format' options=$name_format_options selected=$_post_name_format onchange="this.form.submit()"*}>
+</form>
+</td>
+
+<td></td>
+<td>
+	<form name='press_print' method='post' action='' target="_blank" >
+		<input name="set_name_format" type="hidden" value="<{$_post_name_format}>">
+		<input name="set_all_pinyin_metod" type="hidden" value="<{$default_pinyin}>">
+<{*送出名字*}>
+<{foreach key=id item=name from=$users_name_data }>
+		<{assign var='uid' value=$id}>
+		<{assign var='uuid' value="users_name_data[$uid]"}>
+		<input name="<{$uuid}>" type="hidden" value="<{$name}>">
+	<{*end 送出名字*}>
+<{/foreach}>
+
+		<{foreach from=$pinyin_selected_values key=id item=py_method}>
+
+			<{*拼音方式選擇*}>
+			<{assign var='uid' value=$id}>
+			<{assign var='uuid' value="pinyin_select[$uid]"}>
+			 <input name="<{$uuid}>" type="hidden" value="<{$py_method}>">
+
+				<{*多音字注音sn選定*}>
+				<{if isset($post_ph_selected_values.$id)}>
+					<{foreach from=$post_ph_selected_values.$id key=pos item=ph_sn}>
+						<{assign var='uid' value=$id}>
+						<{assign var='uuid' value="ph_select[$uid][$pos]]"}>
+						 <input name="<{$uuid}>" type="hidden" value="<{$ph_sn}>">
+					<{/foreach}>
+				<{/if}>
+
+		<{/foreach}>
+</form>
+</td>
+</tr>
+
+</table>
+
+<table class="table table-hover table-condensed table-striped table-bordered" cellspacing="0" width="100%" >
+		<form name='form9' method='post' action='' target="" >
+		 <input name="set_all_pinyin_metod" type="hidden" value="<{$default_pinyin}>">
+		 <input name="set_name_format" type="hidden" value="<{$_post_name_format}>">
+
+  <tr class="success"> 
+    <th class="col-md-1">座號</th>
+    <th class="col-md-1">姓名</th>
+		 <th class="col-md-1">拼音方式</th>
+		 <th class="col-md-3">多音字</th>
+		 <th class="col-md-3">姓名英譯</th>
+<{foreach key=id item=name from=$users_name_data }>
+	<{*送出名字*}>
+		<{assign var='uid' value=$id}>
+		<{assign var='uuid' value="users_name_data[$uid]"}>
+		<input name="<{$uuid}>" type="hidden" value="<{$name}>">
+	<{*end 送出名字*}>
+
+  <tr>
+
+	<td><{$id}> <{*座號*}></td>
+	<td><{$name}><{*姓名*}></td>
+	<td style="white-space:nowrap">
+
+<{if $route == "mainView"}>
+  <{*拼音方式*}>		
+  <{assign var='uid' value=$id}>
+  <{assign var='uuid' value="pinyin_select[$uid]"}>
+  <{*html_options name="$uuid" selected=$pinyin_selected_values.$id options=$pinyin_method_options onchange="this.form.submit()"*}>
+<{else}>
+  <{*當列印時的樣式*}>
+  <{$pinyin_method_options[$pinyin_selected_values.$id]}>
+<{/if}>
+	</td>
+	<td>
+
+<{if $route != "mainView"}>
+	<{if isset($hanzi_multi_ph.$id)}>
+		<{foreach from=$hanzi_multi_ph.$id key=pos item=multi_ph_options}>
+			<span class="multi_ph">
+			<{$hanzi.$id.$pos.chinese}>:
+			<{assign var = 'ph_sn' value=$post_ph_selected_values.$id.$pos}>
+			<{$hanzi_multi_ph.$id.$pos.$ph_sn}>
+			</span>
+		 <{/foreach}>
+  <{/if}>
+<{/if}>  <{*end if $route != "mainView"*}>
+	</td>
+  <td>
+    <{*姓名英譯*}>
+    <{*$eng_name_format.$id['selected']*}>
+    <{$eng_name_format.$id}>
+  </td>
+</tr>
+
+<{/foreach}>
+
+		</form>
+</table>
+
+</body>
+</html>
